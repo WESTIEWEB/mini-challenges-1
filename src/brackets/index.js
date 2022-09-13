@@ -6,78 +6,56 @@ const { validateLocaleAndSetLanguage } = require("typescript");
  * @param {string} str The string of brackets.
  * @returns {"valid" | "invalid"} Whether or not the string is valid.
  */
- function isValid (str) {
-    
-    let stack = [];
-    
-    // since balance bracket means for every opening brace, there must be a closing brace
-    if (str.length % 2 !==0) {
-        return "invalid";
-    }
-    
-    //iterating through every item in str
-    for (let c of str) {
-        
-        // this line of code creates an array of only opening braces
-        if ('({['.includes(c)) {
-            stack.push(c);
-        
-        
-            // this line of code check if their is an equivalent closing brace for every opneing brace in the stack array.
-            if (']})'.includes(c)) {
-            
-                let check = stack.pop(); //  that is to say for every closing tag ')' , pop out the equivalent opening tag '('.
-        
-                if (!(c === ')' && check === '(' || c === '}' && check === '{' || c === ']' && check === '[')) {
-                     // let check = stack.pop();
-                    stack.push(c);
 
-                     // return "invalid";
-                
-            
-             
-                    if (stack[stack.length-1] === '') {
-                        return "valid";
-                     }
-                     if (stack.length !==0) {
-                        return "invalid";
-                    }   
-                if( c === '{' && stack.pop() == '{') {
-                    return 'invalid';
-                }
-                if( c === '[' && stack.pop() == '[') {
-                    return 'invalid';
-                }
-                if( c === '(' && stack.pop() == '(') {
-                    return 'invalid';
-                }
-                }
-                
-                
-                else {
-                    return "valid";
-                }
+function isValid (str)  {
+
+    if(str.length % 2 !== 0) { //the first task of the challenge is to check if the string has an odd length
+        return 'invalid';
+    }
+
+    let stack = []; //a balanced bracket has for every opening brace, a corresponding closing closing brace
+                    //hence there is a need to collect all opening in a stack
+
+    for (let i =0; i < str.length; i++) { // this line of code gives acces to every brace in the input string
+
+        let el = str[i];
+
+        if(el==='{' || el==='[' || el === '(') { // this block check for opening braces, and push them to our stack
+            stack.push(el);
+        }
+        if (el === '}') {
+            let retrn = stack.pop(); // all we do here is check if for any opening , there is a corresponding closing
+
+            if(retrn !== '{') {
+                return 'invalid';
             }
-            
-            
-                
-            
-            
-        }  
+        }
 
-        if (!('[({'.includes(c))){
-            return "valid";
-        }  
-        
+        if (el === ')') {
+            let retrn = stack.pop(); // all we do here is check if for any opening , there is a corresponding closing
+
+
+            if(retrn !== '(') {
+                return 'invalid';
+            }
+        }
+
+        if (el === ']') {
+            let retrn = stack.pop();  // all we do here is check if for any opening , there is a corresponding closing
+
+
+            if(retrn !== '[') {
+                return 'invalid';
+            }
+        }
     }
 
-       
-      
-
-   if(stack.length == 0) {
-    return "valid";
-   }
-    
+    if(stack.length === 0) { // since for any corresponding opening and clsoing brace, we always pop them out
+        return 'valid';      // our stack has to be empty for the brackets to be balanced.
+    }
+    else {
+        return 'invalid';
+    }
 }
 
 module.exports = isValid;
